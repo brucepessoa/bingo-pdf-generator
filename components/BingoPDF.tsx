@@ -20,58 +20,52 @@ const styles = StyleSheet.create({
 
 export const BingoPDF = ({ pages, headerInfo }: any) => (
   <Document>
-    {Array.from({ length: pages }).map((_, pageIndex) => {
-      // Move a geração dos números para dentro do loop do `map` dos prêmios
-      // Isso garante que cada cartela seja única
+    {Array.from({ length: pages }).map((_, pageIndex) => (
+      <Page size="A4" style={styles.page} key={pageIndex}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Show de Prêmios</Text>
+          <Text style={styles.info}>Estabelecimento: {headerInfo.establishmentName}</Text>
+          <Text style={styles.info}>Local: {headerInfo.eventLocation}</Text>
+          <Text style={styles.info}>Data: {headerInfo.bingoDay}</Text>
+          <Text style={styles.info}>Hora: {headerInfo.bingoTime}</Text>
+        </View>
 
-      return (
-        <Page size="A4" style={styles.page} key={pageIndex}>
-          <View style={styles.header}>
-            <Text style={styles.title}>Show de Prêmios</Text>
-            <Text style={styles.info}>Estabelecimento: {headerInfo.establishmentName}</Text>
-            <Text style={styles.info}>Local: {headerInfo.eventLocation}</Text>
-            <Text style={styles.info}>Data: {headerInfo.bingoDay}</Text>
-            <Text style={styles.info}>Hora: {headerInfo.bingoTime}</Text>
-          </View>
+        <View style={styles.cardsContainer}>
+          {headerInfo.prizes.map((prize: string, i: number) => {
+            const masterNumbers = generateBingoCardNumbers();
 
-          <View style={styles.cardsContainer}>
-            {headerInfo.prizes.map((prize: string, i: number) => {
-              const masterNumbers = generateBingoCardNumbers(); // <--- GERA UMA NOVA CARTELA AQUI
-
-              return (
-                <View style={styles.card} key={i}>
-                  {/* Tabela */}
-                  <View style={styles.table}>
-                    <View style={styles.row}>
-                      {["B", "I", "N", "G", "O"].map((h) => (
-                        <Text style={[styles.cell, styles.headerCell]} key={h}>{h}</Text>
-                      ))}
-                    </View>
-                    {[0, 1, 2, 3, 4].map((row) => (
-                      <View style={styles.row} key={row}>
-                        {["B", "I", "N", "G", "O"].map((col, colIndex) => {
-                          if (col === "N" && row === 2) {
-                            return <Text style={styles.free} key={colIndex}>Livre</Text>;
-                          }
-                          const val =
-                            col === "B" ? masterNumbers.B[row] :
-                            col === "I" ? masterNumbers.I[row] :
-                            col === "N" ? masterNumbers.N[row < 2 ? row : row - 1] :
-                            col === "G" ? masterNumbers.G[row] :
-                            masterNumbers.O[row];
-                          return <Text style={styles.cell} key={colIndex}>{val}</Text>;
-                        })}
-                      </View>
+            return (
+              <View style={styles.card} key={i}>
+                <View style={styles.table}>
+                  <View style={styles.row}>
+                    {["B", "I", "N", "G", "O"].map((h) => (
+                      <Text style={[styles.cell, styles.headerCell]} key={h}>{h}</Text>
                     ))}
                   </View>
-                  <Text style={styles.prize}>{i + 1}º Prêmio: {prize}</Text>
+                  {[0, 1, 2, 3, 4].map((row) => (
+                    <View style={styles.row} key={row}>
+                      {["B", "I", "N", "G", "O"].map((col, colIndex) => {
+                        if (col === "N" && row === 2) {
+                          return <Text style={[styles.free, styles.cell]} key={colIndex}>Livre</Text>;
+                        }
+                        const val =
+                          col === "B" ? masterNumbers.B[row] :
+                          col === "I" ? masterNumbers.I[row] :
+                          col === "N" ? masterNumbers.N[row < 2 ? row : row - 1] :
+                          col === "G" ? masterNumbers.G[row] :
+                          masterNumbers.O[row];
+                        return <Text style={styles.cell} key={colIndex}>{val}</Text>;
+                      })}
+                    </View>
+                  ))}
                 </View>
-              );
-            })}
-          </View>
-          <Text style={styles.footer}>Folha {pageIndex + 1}</Text>
-        </Page>
-      );
-    })}
+                <Text style={styles.prize}>{i + 1}º Prêmio: {prize}</Text>
+              </View>
+            );
+          })}
+        </View>
+        <Text style={styles.footer}>Folha {pageIndex + 1}</Text>
+      </Page>
+    ))}
   </Document>
 );
