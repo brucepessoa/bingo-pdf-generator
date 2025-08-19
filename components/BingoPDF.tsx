@@ -9,11 +9,11 @@ const styles = StyleSheet.create({
   info: { fontSize: 10, marginBottom: 2 },
   cardsContainer: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-around" },
   card: { border: "1pt solid black", margin: 5, padding: 5, width: 200 },
-  table: { display: "table", width: "100%", borderStyle: "solid", borderWidth: 1 },
-  row: { flexDirection: "row" },
+  table: { display: "flex", flexDirection: "column", width: "100%", borderStyle: "solid", borderWidth: 1 },
+  row: { flexDirection: "row", flex: 1 },
   cell: { flex: 1, borderStyle: "solid", borderWidth: 1, textAlign: "center", padding: 5, fontSize: 12 },
   headerCell: { backgroundColor: "#eee", fontWeight: "bold" },
-  free: { backgroundColor: "#ddd", fontSize: 12, textAlign: "center", padding: 5 },
+  free: { backgroundColor: "#ddd", fontSize: 12, textAlign: "center", padding: 5, flex: 1, borderStyle: "solid", borderWidth: 1 },
   prize: { marginTop: 5, fontSize: 10, textAlign: "center" },
   footer: { position: "absolute", bottom: 10, left: 20, fontSize: 10 }
 });
@@ -37,7 +37,7 @@ export const BingoPDF = ({ pages, headerInfo }: any) => (
             return (
               <View style={styles.card} key={i}>
                 <View style={styles.table}>
-                  <View style={styles.row}>
+                  <View style={[styles.row, { height: '15pt' }]}>
                     {["B", "I", "N", "G", "O"].map((h) => (
                       <Text style={[styles.cell, styles.headerCell]} key={h}>{h}</Text>
                     ))}
@@ -46,7 +46,7 @@ export const BingoPDF = ({ pages, headerInfo }: any) => (
                     <View style={styles.row} key={row}>
                       {["B", "I", "N", "G", "O"].map((col, colIndex) => {
                         if (col === "N" && row === 2) {
-                          return <Text style={[styles.free, styles.cell]} key={colIndex}>Livre</Text>;
+                          return <Text style={styles.free} key={colIndex}>Livre</Text>;
                         }
                         const val =
                           col === "B" ? masterNumbers.B[row] :
