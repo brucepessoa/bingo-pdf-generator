@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   footer: { position: "absolute", bottom: 10, left: 20, fontSize: 10 }
 });
 
-const BingoPDF = ({ pages, headerInfo }: any) => (
+export const BingoPDF = ({ pages, headerInfo }: any) => (
   <Document>
     {Array.from({ length: pages }).map((_, pageIndex) => (
       <Page size="A4" style={styles.page} key={pageIndex}>
@@ -69,5 +69,3 @@ const BingoPDF = ({ pages, headerInfo }: any) => (
     ))}
   </Document>
 );
-
-export default BingoPDF;
