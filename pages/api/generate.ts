@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { renderToStream } from "@react-pdf/renderer";
-import BingoPDF from "../../components/BingoPDF"; // Importação padrão
+import { BingoPDF } from "../../components/BingoPDF";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
